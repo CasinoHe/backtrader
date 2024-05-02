@@ -171,6 +171,7 @@ class Trade(object):
         self.size = size
         self.price = price
         self.close_price = 0  # close price for the trade
+        self.close_size = 0  # close size for the trade
         self.value = value
         self.commission = commission
 
@@ -282,6 +283,7 @@ class Trade(object):
             self.barclose = len(self.data)
             self.dtclose = self.data.datetime[0]
             self.close_price = price
+            self.close_size += size
 
             self.status = self.Closed
         elif self.isopen:
