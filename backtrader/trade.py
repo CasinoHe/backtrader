@@ -152,7 +152,7 @@ class Trade(object):
     def __str__(self):
         toprint = (
             'ref', 'data', 'tradeid',
-            'size', 'price', 'value', 'commission', 'pnl', 'pnlcomm',
+            'size', 'price', 'close_price', 'value', 'commission', 'pnl', 'pnlcomm',
             'justopened', 'isopen', 'isclosed',
             'baropen', 'dtopen', 'barclose', 'dtclose', 'barlen',
             'historyon', 'history',
@@ -170,6 +170,7 @@ class Trade(object):
         self.tradeid = tradeid
         self.size = size
         self.price = price
+        self.close_price = 0  # close price for the trade
         self.value = value
         self.commission = commission
 
@@ -280,6 +281,7 @@ class Trade(object):
             self.isopen = False
             self.barclose = len(self.data)
             self.dtclose = self.data.datetime[0]
+            self.close_price = price
 
             self.status = self.Closed
         elif self.isopen:
