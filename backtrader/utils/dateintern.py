@@ -24,8 +24,8 @@ from __future__ import (absolute_import, division, print_function,
 import datetime
 import math
 import time as _time
-
-from .py3 import string_types
+import pytz
+import dateutil.tz
 
 
 ZERO = datetime.timedelta(0)
@@ -46,58 +46,21 @@ TIME_MIN = datetime.time.min
 
 
 def tzparse(tz):
-    # If no object has been provided by the user and a timezone can be
-    # found via contractdtails, then try to get it from pytz, which may or
-    # may not be available.
-    tzstr = isinstance(tz, string_types)
-    if tz is None or not tzstr:
-        return Localizer(tz)
+    if tz is None:
+        return None
 
-    try:
-        import pytz  # keep the import very local
-    except ImportError:
-        return Localizer(tz)    # nothing can be done
-
-    tzs = tz
-    if tzs == 'CST':  # usual alias
-        tzs = 'CST6CDT'
-
-    try:
-        tz = pytz.timezone(tzs)
-    except pytz.UnknownTimeZoneError:
-        return Localizer(tz)    # nothing can be done
-
-    return tz
+    if tz not in pytz.all_timezones:
+        raise ValueError('Timezone %s not understood' % tz)
+    return pytz.timezone(tz)
 
 
 def Localizer(tz):
-    import types
+    if tz is None:
+        return None
 
-    def localize(self, dt):
-        return dt.replace(tzinfo=self)
-
-    if tz is not None and not hasattr(tz, 'localize'):
-        # patch the tz instance with a bound method
-        tz.localize = types.MethodType(localize, tz)
-
+    if not hasattr(tz, "localize"):
+        raise ValueError('Timezone %s not understood' % tz)
     return tz
-
-
-# A UTC class, same as the one in the Python Docs
-class _UTC(datetime.tzinfo):
-    """UTC"""
-
-    def utcoffset(self, dt):
-        return ZERO
-
-    def tzname(self, dt):
-        return "UTC"
-
-    def dst(self, dt):
-        return ZERO
-
-    def localize(self, dt):
-        return dt.replace(tzinfo=self)
 
 
 class _LocalTimezone(datetime.tzinfo):
@@ -133,8 +96,8 @@ class _LocalTimezone(datetime.tzinfo):
         return dt.replace(tzinfo=self)
 
 
-UTC = _UTC()
-TZLocal = _LocalTimezone()
+UTC = pytz.utc
+TZLocal =  dateutil.tz.tzlocal()
 
 
 HOURS_PER_DAY = 24.0
