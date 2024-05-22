@@ -773,6 +773,12 @@ class Cerebro(with_metaclass(MetaParams, object)):
 
         return data
 
+    def getdatabyname(self, dataname):
+        if dataname in self.datasbyname:
+            return self.datasbyname[dataname]
+        else:
+            return None
+
     def chaindata(self, *args, **kwargs):
         '''
         Chains several data feeds into one
