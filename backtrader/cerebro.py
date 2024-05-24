@@ -1238,7 +1238,10 @@ class Cerebro(with_metaclass(MetaParams, object)):
             sargs = self.datas + list(sargs)
             try:
                 strat = stratcls(*sargs, **skwargs)
-                self.addstrategyname(strat, strat._name)
+                if hasattr(strat, '_name'):
+                    self.addstrategyname(strat, strat._name)
+                else:
+                    print('Strategy %s has no name, you should add super().__init__ at the end of __init__' % stratcls.__name__)
             except bt.errors.StrategySkipError:
                 continue  # do not add strategy to the mix
 
