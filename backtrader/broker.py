@@ -165,4 +165,10 @@ class BrokerBase(with_metaclass(MetaBroker, object)):
     def next(self):
         pass
 
+    def load_orders(self):
+        '''
+        Load the opended orders from file, always using in a live trading strategy
+        '''
+        pass
+
 # __all__ = ['BrokerBase', 'fillers', 'filler']

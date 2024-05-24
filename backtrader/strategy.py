@@ -117,6 +117,13 @@ class Strategy(with_metaclass(MetaStrategy, StrategyBase)):
     # keep the latest delivered data date in the line
     lines = ('datetime',)
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._name = kwargs["name"] if "name" in kwargs else self.__class__.__name__
+
+    def getname(self):
+        return self._name
+
     def qbuffer(self, savemem=0, replaying=False):
         '''Enable the memory saving schemes. Possible values for ``savemem``:
 

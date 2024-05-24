@@ -597,7 +597,8 @@ class AbstractDataBase(with_metaclass(MetaAbstractDataBase,
 
 
 class DataBase(AbstractDataBase):
-    pass
+    def getname(self):
+        return self._name
 
 
 class FeedBase(with_metaclass(metabase.MetaParams, object)):

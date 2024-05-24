@@ -301,6 +301,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
         self.feeds = list()
         self.datas = list()
         self.datasbyname = collections.OrderedDict()
+        self.startbyname = collections.OrderedDict()
         self.strats = list()
         self.optcbs = list()  # holds a list of callbacks for opt strategies
         self.observers = list()
@@ -779,6 +780,17 @@ class Cerebro(with_metaclass(MetaParams, object)):
         else:
             return None
 
+    def getstratbyname(self, stratname):
+        if stratname in self.startbyname:
+            return self.startbyname[stratname]
+        else:
+            return None
+
+    def addstrategyname(self, strat, name):
+        if name in self.startbyname:
+            print("Strategy name %s is already in use" % name)
+        self.startbyname[name] = strat
+
     def chaindata(self, *args, **kwargs):
         '''
         Chains several data feeds into one
@@ -1226,6 +1238,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
             sargs = self.datas + list(sargs)
             try:
                 strat = stratcls(*sargs, **skwargs)
+                self.addstrategyname(strat, strat._name)
             except bt.errors.StrategySkipError:
                 continue  # do not add strategy to the mix
 
@@ -1240,6 +1253,10 @@ class Cerebro(with_metaclass(MetaParams, object)):
             tz = self.datas[tz]._tz
         else:
             tz = tzparse(tz)
+
+        # We should load the opened orders after the strategies have been instantiated
+        # the owner of the order is the strategy, and the strategy is not created until now
+        self._broker.load_orders()
 
         if runstrats:
             # loop separated for clarity
