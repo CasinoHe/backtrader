@@ -127,7 +127,9 @@ class YahooFinanceCSVData(feed.CSVDataBase):
 
         dttxt = linetokens[next(i)]
         dt = date(int(dttxt[0:4]), int(dttxt[5:7]), int(dttxt[8:10]))
-        dtnum = date2num(datetime.combine(dt, self.p.sessionend))
+        # add tz info
+        tz_dt = self._gettz().localize(datetime.combine(dt, self.p.sessionstart)) 
+        dtnum = date2num(tz_dt)
 
         self.lines.datetime[0] = dtnum
         o = float(linetokens[next(i)])
