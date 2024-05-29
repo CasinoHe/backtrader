@@ -25,6 +25,7 @@ import collections
 from copy import copy
 import datetime
 import itertools
+import uuid
 
 from .utils.py3 import range, with_metaclass, iteritems
 
@@ -301,6 +302,7 @@ class OrderBase(with_metaclass(MetaParams, object)):
 
     def __init__(self):
         self.ref = next(self.refbasis)
+        self.uuid = str(uuid.uuid4())
         self.broker = None
         self.info = AutoOrderedDict()
         self.comminfo = None

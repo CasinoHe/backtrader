@@ -166,6 +166,7 @@ class Trade(object):
                  size=0, price=0.0, value=0.0, commission=0.0):
 
         self.ref = next(self.refbasis)
+        self.uuid = None
         self.data = data
         self.tradeid = tradeid
         self.size = size
@@ -255,6 +256,8 @@ class Trade(object):
 
         # Commission can only increase
         self.commission += commission
+
+        self.uuid = order.uuid
 
         # Update size and keep a reference for logic an calculations
         oldsize = self.size
