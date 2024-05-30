@@ -600,6 +600,9 @@ class DataBase(AbstractDataBase):
     def getname(self):
         return self._name
 
+    def push_error(self, msg):
+        pass
+
 
 class FeedBase(with_metaclass(metabase.MetaParams, object)):
     params = () + DataBase.params._gettuple()
