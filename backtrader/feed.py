@@ -244,7 +244,7 @@ class AbstractDataBase(with_metaclass(MetaAbstractDataBase,
         return tzparse(self.p.tz)
 
     def date2num(self, dt):
-        if self._tz is not None:
+        if self._tz is not None and not dt.tzinfo:
             return date2num(self._tz.localize(dt))
 
         return date2num(dt)
