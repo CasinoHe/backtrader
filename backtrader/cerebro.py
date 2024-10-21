@@ -1585,9 +1585,12 @@ class Cerebro(with_metaclass(MetaParams, object)):
                 if onlyresample or noresample:
                     dt0 = min((d for d in dts if d is not None))
                 else:
-                    dt0 = min((d for i, d in enumerate(dts)
-                               if d is not None and i not in rsonly))
-
+                    dts_ret = [d for i, d in enumerate(dts) if d is not None and i not in rsonly]
+                    print(f"{datetime.datetime.now()} Warning: We have resampling but no replaying data in the datas: {dts_ret}")
+                    if len(dts_ret) == 0:
+                        dt0 = min((d for d in dts if d is not None))
+                    else:
+                        dt0 = min(dts_ret)
                 dmaster = datas[dts.index(dt0)]  # and timemaster
                 self._dtmaster = dmaster.num2date(dt0)
                 self._udtmaster = num2date(dt0)
