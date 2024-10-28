@@ -1579,7 +1579,7 @@ class Cerebro(with_metaclass(MetaParams, object)):
                     skip = True
                     break
             if skip:
-                continue
+                return
 
             d0ret = any((dret for dret in drets))
             if not d0ret and any((dret is None for dret in drets)):
