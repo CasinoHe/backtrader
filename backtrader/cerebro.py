@@ -1572,6 +1572,15 @@ class Cerebro(with_metaclass(MetaParams, object)):
                 d.do_qcheck(newqcheck, qlapse.total_seconds())
                 drets.append(d.next(ticks=False))
 
+            # if lose connection, we skip the rest of the loop
+            skip = False
+            for d in datas:
+                if d.skip_data():
+                    skip = True
+                    break
+            if skip:
+                return
+
             d0ret = any((dret for dret in drets))
             if not d0ret and any((dret is None for dret in drets)):
                 d0ret = None

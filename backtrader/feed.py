@@ -603,6 +603,9 @@ class DataBase(AbstractDataBase):
     def push_error(self, msg):
         pass
 
+    def skip_data(self):
+        return False
+
 
 class FeedBase(with_metaclass(metabase.MetaParams, object)):
     params = () + DataBase.params._gettuple()
