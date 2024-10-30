@@ -1579,10 +1579,10 @@ class Cerebro(with_metaclass(MetaParams, object)):
                     skip = True
                     break
             if skip:
+                print("Data source is under disconnection, skip data touching.")
                 self._brokernotify()
                 if self._event_stop:  # stop if requested
                     return
-                print("Data source is under disconnection, skip data touching.")
                 continue
 
             d0ret = any((dret for dret in drets))
